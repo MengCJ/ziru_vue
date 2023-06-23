@@ -1,5 +1,5 @@
 <template>
-  <div>AddUser</div>
+  <div>AddUserUUUUU</div>
 </template>
 
 <script>
@@ -7,6 +7,7 @@ export default {
   name:'Adduser'
 }
 </script>
+
 
 <style>
 
