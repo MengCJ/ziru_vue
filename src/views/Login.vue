@@ -1,0 +1,167 @@
+
+
+<template>
+  <div
+    class="box"
+    v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+    style="width: 100%"
+  >
+    <div class="login-box">
+      <h2 style="color: white">Login</h2>
+      <form>
+        <div class="user-box">
+          <input v-model="user.username" name="name" />
+          <label>Username</label>
+        </div>
+        <div class="user-box">
+          <input
+            type="password"
+            @keydown.enter="login"
+            v-model="user.password"
+            name="passwd"
+          />
+          <label>Password</label>
+        </div>
+        <center>
+          <a href="#" @click="login">
+            登录
+            <span> </span>
+          </a>
+        </center>
+      </form>
+    </div>
+  </div>
+</template>
+
+<script>
+import { doLogin } from "@/api/login";
+export default {
+  name: "Login",
+  data() {
+    return {
+      user: {
+        username: "admin",
+        password: "123",
+      },
+      userinfo: {},
+      loading: false,
+    };
+  },
+  methods: {
+    async login() {
+      this.loading = true;
+      const res = await doLogin(this.user);
+      if (res.status === 200) {
+        this.userinfo = res.data;
+        window.localStorage.setItem("userInfo", JSON.stringify(res.data));
+        this.loading = false;
+        this.$router.push("/home");
+        this.$message({
+          type: "success",
+          message: "登录成功",
+        });
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+.login-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  padding: 40px;
+  transform: translate(-50%, -50%);
+  background: rgba(24, 20, 20, 0.987);
+  box-sizing: border-box;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+}
+
+.login-box .user-box {
+  position: relative;
+}
+
+.login-box .user-box input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+}
+
+.login-box .user-box label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.login-box .user-box input:focus ~ label,
+.login-box .user-box input:valid ~ label {
+  top: -20px;
+  left: 0;
+  color: #bdb8b8;
+  font-size: 12px;
+}
+
+.login-box form a {
+  position: relative;
+  display: inline-block;
+  padding: 10px 20px;
+  color: #ffffff;
+  font-size: 16px;
+  text-decoration: none;
+  text-transform: uppercase;
+  overflow: hidden;
+  transition: 0.5s;
+  margin-top: 40px;
+  letter-spacing: 4px;
+}
+
+.login-box a:hover {
+  background: #03f40f;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #03f40f, 0 0 25px #03f40f, 0 0 50px #03f40f,
+    0 0 100px #03f40f;
+}
+
+.login-box a span {
+  position: absolute;
+  display: block;
+}
+
+@keyframes btn-anim1 {
+  0% {
+    left: -100%;
+  }
+
+  50%,
+  100% {
+    left: 100%;
+  }
+}
+
+.login-box a span:nth-child(1) {
+  bottom: 2px;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #03f40f);
+  animation: btn-anim1 2s linear infinite;
+}
+</style>
