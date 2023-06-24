@@ -40,7 +40,7 @@ export default {
   components:{AddRoom},
   data(){
     return{
-        roomData:{},
+        roomData:[],
         currentPage:1,
         pageSize:10,
         total:0
