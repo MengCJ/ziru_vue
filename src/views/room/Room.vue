@@ -38,6 +38,7 @@
 import AddRoom from "./addFrom/AddRoom.vue";
 export default {
   name: "Room",
+<<<<<<< HEAD
   components: { AddRoom },
   data() {
     return {
@@ -46,6 +47,16 @@ export default {
       pageSize: 10,
       total: 0,
     };
+=======
+  components:{AddRoom},
+  data(){
+    return{
+        roomData:[],
+        currentPage:1,
+        pageSize:10,
+        total:0
+    }
+>>>>>>> beea90bb5cd5097b62b0e3243525f1c71551bc06
   },
   methods: {
     async getRoomData() {

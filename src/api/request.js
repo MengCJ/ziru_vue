@@ -30,6 +30,7 @@ requests.interceptors.response.use((res)=>{
         // success.data.status 表示服务端返回的 JSON 中的 status 的值
         //此时，说明业务是失败的
         //在这里直接返回
+        nprogress.done();
         return;
     }
     // if (res.data.message) {

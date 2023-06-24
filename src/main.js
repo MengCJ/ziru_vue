@@ -7,6 +7,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
 import * as Api  from "@/api/room" 
+import * as UserApi  from "@/api/user" 
  
 Vue.use(ElementUI);
 
@@ -18,5 +19,6 @@ new Vue({
   render: h => h(App),
   beforeCreate(){
     Vue.prototype.$Api = Api
+    Vue.prototype.$UserApi = UserApi
   }
 }).$mount('#app')
