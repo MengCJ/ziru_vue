@@ -9,7 +9,7 @@
       >添加房间</el-button
     >
 
-    <el-table :data="roomData" border style="width: 100%; margin-top: 10px">
+    <el-table :data="roomData" :border="true" style="width: 100%; margin-top: 10px">
       <el-table-column prop="roomId" label="编号" width="90"> </el-table-column>
       <el-table-column prop="residence.name" label="所属小区" width="180">
       </el-table-column>
@@ -38,7 +38,6 @@
 import AddRoom from "./addFrom/AddRoom.vue";
 export default {
   name: "Room",
-<<<<<<< HEAD
   components: { AddRoom },
   data() {
     return {
@@ -47,16 +46,6 @@ export default {
       pageSize: 10,
       total: 0,
     };
-=======
-  components:{AddRoom},
-  data(){
-    return{
-        roomData:[],
-        currentPage:1,
-        pageSize:10,
-        total:0
-    }
->>>>>>> beea90bb5cd5097b62b0e3243525f1c71551bc06
   },
   methods: {
     async getRoomData() {
