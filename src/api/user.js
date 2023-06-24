@@ -18,3 +18,6 @@ export const editUser = (user) => req({url:'/user',method:'put',data:user})
 
 // 根据id查询用户信息
 export const getUserById = (id) => req({url:`/user/${id}`,method:'get'})
+
+// 解封用户
+export const deBlockedUser = (id) => req({url:`/user/${id}`,method:'put'})

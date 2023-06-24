@@ -122,11 +122,31 @@ export default {
       this.currentPage = page;
       this.getUserList();
     },
-    // 禁用用户
+    // 修改用户状态
     async handleStatus(user){
       if(user.enabled){
         const res = await this.$UserApi.deleteUser(user.id)
         this.$confirm(`此操作将禁用该用户, 是否继续?`, {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if(res.status == 200) {
+            this.$message({
+              type: 'success',
+              message: '已禁用该用户'
+            });
+            this.getUserList()
+          }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消操作'
+          });          
+        });
+      }else{
+        const res = await this.$UserApi.deBlockedUser(user.id)
+        this.$confirm(`此操作将解禁该用户, 是否继续?`, {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
