@@ -79,6 +79,7 @@
           <el-tag
             type="success"
             style="margin-right: 10px; cursor: pointer"
+            size="mini"
             @click="editResidence(row)"
             >编辑</el-tag
           >
@@ -146,7 +147,7 @@ export default {
     showDataTable() {
       this.$refs.child.dialogFormVisible = true;
       this.$refs.child.dataTitie = "添加小区";
-      this.$refs.child.clearValue()
+      this.$refs.child.clearRedience()
     },
     // 删除小区
     deleteResidence(row) {
@@ -171,15 +172,12 @@ export default {
       this.dialogFormVisible = !this.dialogFormVisible;
       const [province, city, area] = this.selectedOptions;
       let result = { ...this.residence, province, city, area };
-      console.log(result);
       const res = await this.$Api.addRedience(result);
       if (res.status == 200) {
         this.$message({
           type: "success",
           message: "添加成功",
         });
-        Object.assign(this.$data.residence, this.$options.data().residence);
-        this.selectedOptions = "";
       }
     },
     // 获取小区的数据

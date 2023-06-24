@@ -78,18 +78,16 @@ export default {
           });
         }
       }
+      Object.assign(this._data,this.$options.data());
       this.$parent.getData();
     },
-    clearValue() {
-      let obj = this.residence
-      this.selectedOptions = []
-      Object.keys(obj).forEach((key) => {
-        if (typeof obj[key] == "object") {
-          this.clearValue(obj[key]);
-        } else {
-          obj[key] = "";
-        }
-      });
+    clearRedience(){
+        this.residence.name = ""
+        this.residence.province = ""
+        this.residence.link = ""
+        this.residence.linkPhone = ""
+        this.residence.address = ""
+        this.selectedOptions = []
     },
     // 获取编辑小区数据
     async editResidenceData(row) {

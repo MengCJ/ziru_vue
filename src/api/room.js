@@ -12,7 +12,6 @@ export const addResidenceById = (rid) =>req({url:`/residence/${rid}`,method:"get
 export const putResidence = (data) => req({url:"/residence",method:'put',data}) 
 
 //房源接口
-export const addRoom = (data)=>req({url:'/room',method:"post",data})
 
 export const getRoomPage = (page,size)=>req({url:`/room?page=${page}&size=${size}`,method:"get"})
 
@@ -20,4 +19,13 @@ export const deleteRoom = (roomId)=>req({url:`/room/${roomId}`,method:"delete"})
 
 export const getRoomById = (roomId)=>req({url:`/room/${roomId}`,method:"get"})
 
-export const updataRoom = (data)=>req({url:"/room",method:"put",data})
+
+export const addRoomAndupdataRoom = (data)=>{
+    if(data.roomId){
+        return req({url:"/room",method:"put",data})
+    }
+        return req({url:'/room',method:"post",data})
+}
+   
+    
+
