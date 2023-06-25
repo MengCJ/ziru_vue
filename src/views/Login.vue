@@ -1,38 +1,26 @@
-
-
 <template>
-  <div
-    class="box"
-    v-loading="loading"
-    element-loading-text="拼命加载中"
-    element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(0, 0, 0, 0.8)"
-    style="width: 100%"
-  >
-    <div class="login-box">
-      <h2 style="color: white">Login</h2>
-      <form>
-        <div class="user-box">
-          <input v-model="user.username" name="name" />
-          <label>Username</label>
-        </div>
-        <div class="user-box">
-          <input
-            type="password"
-            @keydown.enter="login"
-            v-model="user.password"
-            name="passwd"
-          />
-          <label>Password</label>
-        </div>
-        <center>
-          <a href="#" @click="login">
-            登录
-            <span> </span>
-          </a>
-        </center>
-      </form>
-    </div>
+  <div class="login-box">
+    <h2 style="color: white; margin-bottom: 20px">Login</h2>
+    <form>
+      <div class="user-box">
+        <input v-model="user.username" name="name" />
+        <label>Username</label>
+      </div>
+      <div class="user-box">
+        <input
+          type="password"
+          @keydown.enter="login"
+          v-model="user.password"
+          name="passwd"
+        />
+        <label>Password</label>
+      </div>
+      <center>
+        <a href="#" @click="login">登录
+          <span> </span>
+        </a>
+      </center>
+    </form>
   </div>
 </template>
 
@@ -54,7 +42,7 @@ export default {
     async login() {
       this.loading = true;
       const res = await doLogin(this.user);
-      if (res.status === 200) {
+      if (res) {
         this.userinfo = res.data;
         window.localStorage.setItem("userInfo", JSON.stringify(res.data));
         this.loading = false;
@@ -62,6 +50,11 @@ export default {
         this.$message({
           type: "success",
           message: "登录成功",
+        });
+      }else{
+        this.$notify.error({
+          title: '错误',
+          message: '用户名或密码不正确'
         });
       }
     },
