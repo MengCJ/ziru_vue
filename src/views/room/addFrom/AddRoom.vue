@@ -126,8 +126,8 @@ export default {
       const res = await this.$Api.getRoomById(row.roomId);
       if (res.status == 200) {
         this.room = res.data;
-
       }
+      this.dialogFormVisible = true
     },
   },
 };

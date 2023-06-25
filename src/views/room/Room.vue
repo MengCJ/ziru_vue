@@ -185,7 +185,6 @@ export default {
     },
     updataRommds(row) {
       this.$refs.room.editRoom(row);
-      this.$refs.room.dialogFormVisible = true;
     },
     deleteRoom(row) {
       this.$confirm("此操作将永久删除该房间, 是否继续?", "提示", {
