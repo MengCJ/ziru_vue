@@ -6,7 +6,7 @@
           <el-input
             type="text"
             v-model="searchKey"
-            @mouseenter="handleSearch"
+            @keydown.enter.native="handleSearch"
             size="mini"
             placeholder="根据用户昵称搜索"></el-input>
         </el-col>
@@ -62,6 +62,7 @@
 
 <script>
 import UserForm from '@/views/user/addUserForm.vue'
+import _ from 'lodash'
 export default {
   name: "SearchUser",
   components:{UserForm},
@@ -76,6 +77,13 @@ export default {
   },
   mounted(){
     this.getUserList()
+  },
+  watch:{
+    searchKey:{
+      handler(){
+        this.debouncedSearch()
+      }
+    }
   },
   methods: {
     // 初始化用户数据
@@ -165,7 +173,11 @@ export default {
           });          
         });
       }
-    }
+    },
+    // 对搜索栏进行防抖处理
+    debouncedSearch: _.debounce(function() {
+      this.getUserList()
+    },200)
   },
 };
 </script>
