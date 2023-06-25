@@ -1,5 +1,51 @@
 <template>
   <div class="room">
+    <div>
+      <el-card class="box-card">
+        所属小区
+        <el-select
+          v-model="sreach.rid"
+          clearable
+          placeholder="请选择"
+          size="mini"
+        >
+          <el-option
+            v-for="(item, index) in residenceName"
+            :key="index"
+            :label="item.name"
+            :value="item.rid"
+          >
+          </el-option>
+        </el-select>
+        户型
+        <el-input
+          size="mini"
+          placeholder="请输入户型"
+          v-model="sreach.roomType"
+          style="margin: 0 10px"
+          clearable
+        ></el-input>
+        租金范围
+        <el-form ref="form" :model="sreach" :rules="rules" style="display: flex; display: inline-block;">
+          <el-form-item prop="minrentFee" style="display: inline-block;">
+            <el-input v-model.number="sreach.minrentFee" style="width:100px" size="mini"/>
+          </el-form-item>
+          ~
+          <el-form-item prop="maxrentFee" style="display: inline-block;">
+            <el-input v-model.number="sreach.maxrentFee" style="width:100px" size="mini"/>
+          </el-form-item>
+        </el-form>
+      
+        <el-button
+          type="primary"
+          size="mini"
+          style="margin-left: 10px"
+          @click="sreachRoom"
+          >搜索</el-button
+        >
+      </el-card>
+    </div>
+
     <el-button
       style="margin-top: 20px"
       size="mini"
@@ -9,9 +55,17 @@
       >添加房间</el-button
     >
 
-    <el-table :data="roomData" :border="true" style="width: 100%; margin-top: 10px">
-      <el-table-column prop="roomId" label="编号" width="90"> </el-table-column>
-      <el-table-column prop="residence.name" label="所属小区" width="180">
+    <el-table
+      :data="roomData"
+      :border="true"
+      style="width: 100%; margin-top: 10px"
+    >
+      <el-table-column prop="roomId" label="编号" width="60" :align="center">
+      </el-table-column>
+      <el-table-column label="所属小区" width="150" :align="center">
+        <template slot-scope="{ row }">
+          <el-tag size="plus">{{ row.residence.name }}</el-tag>
+        </template>
       </el-table-column>
       <el-table-column prop="buildingNo" label="楼栋名称"> </el-table-column>
       <el-table-column prop="unitNo" label="单元号"> </el-table-column>
@@ -20,12 +74,14 @@
       <el-table-column prop="roomDirection" label="房间朝向"> </el-table-column>
       <el-table-column prop="rentFee" label="租金"> </el-table-column>
       <el-table-column prop="propertyFee" label="物业费"> </el-table-column>
-      <el-table-column width="300" label="操作"  >
-        <template slot-scope="{ row }" >
+      <el-table-column width="300" label="操作">
+        <template slot-scope="{ row }">
           <el-button type="success" size="mini" @click="updataRommds(row)"
             >更新</el-button
           >
-          <el-button type="danger" size="mini" @click="deleteRoom(row)">删除</el-button>
+          <el-button type="danger" size="mini" @click="deleteRoom(row)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -36,6 +92,8 @@
 
 <script>
 import AddRoom from "./addFrom/AddRoom.vue";
+const MIN_NUMBER = 1;
+const MAX_NUMBER = 100000;
 export default {
   name: "Room",
   components: { AddRoom },
@@ -45,47 +103,119 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
+      residenceName: "",
+      sreach: {
+        rid: "",
+        roomType: "",
+        minrentFee: "",
+        maxrentFee:""
+      },
+      center: "center",
+      rules: {
+        minrentFee: [
+          { validator: this.validateMin, trigger: "blur" },
+          { validator: this.validateNumber, trigger: "blur" },
+        ],
+        maxrentFee: [
+        { validator: this.validateNumber, trigger: "blur" },
+          { validator: this.validateMax, trigger: "blur" },
+          
+        ],
+      },
     };
   },
   methods: {
+    validateMin(rule, value, callback) {
+      const one = Number(value);
+      const max = Number(this.sreach.maxrentFee);
+      if (!max || one < max) {
+        return callback();
+      }
+      return callback(new Error("输入值不得大于最大阈值"));
+    },
+    validateMax(rule, value, callback) {
+      const one = Number(value);
+      const min = Number(this.sreach.minrentFee);
+      if (!min || one > min) {
+        return callback();
+      }
+      return callback(new Error("输入值不得小于最小阈值"));
+    },
+    validateNumber(rule, value, callback) {
+      const one = Number(value);
+      console.log(one);
+      if( Object.is(one,NaN)  ){
+        return callback(new Error(`请输入整数`));
+      }
+      if(one<=0){
+        return callback(new Error(`请输入正整数`));
+      }
+      return callback();
+    },
+    sreachRoom() {
+      this.getRoomData();
+    },
     async getRoomData() {
       const { currentPage, pageSize } = this;
-      const res = await this.$Api.getRoomPage(currentPage, pageSize);
+      const { rid, roomType, minrentFee,maxrentFee } = this.sreach;
+      const res = await this.$Api.getRoomPage(
+        currentPage,
+        pageSize,
+        rid || "",
+        roomType || "",
+        minrentFee || "",
+        maxrentFee||""
+      );
       this.roomData = res.data;
       this.total = res.total;
-      
     },
     addRoom() {
       this.$refs.room.dialogFormVisible = true;
-      this.$refs.room.clearRoom()
-      this.$refs.room.seleceResidence = this.roomData
+      this.$refs.room.clearRoom();
+      this.$refs.room.seleceResidence = this.residenceName;
+    },
+    async getResidenceName() {
+      const res = await this.$Api.getRediencePage(1, 10, "", "", "", "");
+      this.residenceName = res.data.map((item) => {
+        return {
+          name: item.name,
+          rid: item.rid,
+        };
+      });
     },
     updataRommds(row) {
       this.$refs.room.editRoom(row);
       this.$refs.room.dialogFormVisible = true;
-      
     },
-    deleteRoom(row){
-      this.$confirm('此操作将永久删除该房间, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(async () => {
-          const res = await this.$Api.deleteRoom(row.roomId)
-            this.getRoomData()
-            this.$message.success(res.message)
-        }).catch(() => {
-          this.$message.error("删除失败")          
+    deleteRoom(row) {
+      this.$confirm("此操作将永久删除该房间, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          const res = await this.$Api.deleteRoom(row.roomId);
+          this.getRoomData();
+          this.$message.success(res.message);
+        })
+        .catch(() => {
+          this.$message.error("删除失败");
         });
-    }
+    },
   },
   mounted() {
     this.getRoomData();
+    this.getResidenceName();
   },
 };
 </script>
 
 <style lang="less" scoped>
-.room {
+.box-card {
+  width: 100%;
+  display: flex;
+}
+.el-input {
+  width: 200px;
 }
 </style>

@@ -13,7 +13,7 @@ export const putResidence = (data) => req({url:"/residence",method:'put',data})
 
 //房源接口
 
-export const getRoomPage = (page,size)=>req({url:`/room?page=${page}&size=${size}`,method:"get"})
+export const getRoomPage = (page,size,rid,roomType,minRentFee,maxRentFee)=>req({url:`/room/list?page=${page}&size=${size}&rid=${rid}&roomType=${roomType}&minRentFee=${minRentFee}&maxRentFee=${maxRentFee}`,method:"get"})
 
 export const deleteRoom = (roomId)=>req({url:`/room/${roomId}`,method:"delete"})
 

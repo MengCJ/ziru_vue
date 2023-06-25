@@ -5,13 +5,13 @@
       :visible.sync="dialogFormVisible"
     >
       <el-form :model="room" label-width="80px">
-        <el-form-item label="整栋名称" width="10px">
+        <el-form-item label="小区选择" width="10px" v-show="!room.roomId">
           <!-- <el-input  v-model="room.buildingNo" placeholder="请输入楼层名称"></el-input> -->
-          <el-select v-model="value" clearable placeholder="请选择">
+          <el-select v-model="room.rid" clearable placeholder="请选择">
             <el-option
-              v-for="item in seleceResidence"
-              :key="item.rid"
-              :label="item.residence.name"
+              v-for="(item,index) in seleceResidence"
+              :key="index"
+              :label="item.name"
               :value="item.rid"
             >
             </el-option>
@@ -91,10 +91,12 @@ export default {
         roomDirection: "",
         rentFee: "",
         propertyFee: "",
+        rid:''
       },
       dialogFormVisible: false,
       // 小区选择
-      seleceResidence:[]
+      seleceResidence:[],
+    
     };
   },
   methods: {
@@ -114,12 +116,17 @@ export default {
       this.room.roomDirection = "";
       this.room.rentFee = "";
       this.room.propertyFee = "";
+      this.room.rid = ""
+      if(this.room.roomId){
+        this.room.roomId = ""
+      }
     },
 
     async editRoom(row) {
       const res = await this.$Api.getRoomById(row.roomId);
       if (res.status == 200) {
         this.room = res.data;
+
       }
     },
   },
