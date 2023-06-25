@@ -6,7 +6,7 @@
           <el-input
             type="text"
             v-model="searchKey"
-            @mouseenter="handleSearch"
+            @keydown.enter.native="handleSearch"
             size="mini"
             placeholder="根据用户昵称搜索"></el-input>
         </el-col>
@@ -62,6 +62,7 @@
 
 <script>
 import UserForm from '@/views/user/addUserForm.vue'
+import _ from 'lodash'
 export default {
   name: "SearchUser",
   components:{UserForm},
@@ -76,6 +77,13 @@ export default {
   },
   mounted(){
     this.getUserList()
+  },
+  watch:{
+    searchKey:{
+      handler(){
+        this.debouncedSearch()
+      }
+    }
   },
   methods: {
     // 初始化用户数据
@@ -122,7 +130,7 @@ export default {
       this.currentPage = page;
       this.getUserList();
     },
-    // 禁用用户
+    // 修改用户状态
     async handleStatus(user){
       if(user.enabled){
         const res = await this.$UserApi.deleteUser(user.id)
@@ -144,8 +152,32 @@ export default {
             message: '已取消操作'
           });          
         });
+      }else{
+        const res = await this.$UserApi.deBlockedUser(user.id)
+        this.$confirm(`此操作将解禁该用户, 是否继续?`, {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if(res.status == 200) {
+            this.$message({
+              type: 'success',
+              message: '已禁用该用户'
+            });
+            this.getUserList()
+          }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消操作'
+          });          
+        });
       }
-    }
+    },
+    // 对搜索栏进行防抖处理
+    debouncedSearch: _.debounce(function() {
+      this.getUserList()
+    },200)
   },
 };
 </script>
