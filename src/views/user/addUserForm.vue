@@ -108,7 +108,6 @@ export default {
       }
       if(this.title == '更新用户') {
         // 更新用户
-        console.log('更新用户',this.form)
         try {
           const res =  await this.$UserApi.editUser(this.form)
           if (res.status === 200) {
@@ -121,7 +120,6 @@ export default {
             this.$parent.getUserList()
           }
         } catch (error) {
-          console.log(error)
           this.$message.error('出错啦~')
         }
       }
@@ -129,7 +127,6 @@ export default {
     async getRoleList(){
       const roleData = await this.$UserApi.getAllRoleList()
       this.role = roleData.data
-      console.log('role列表',this.role)
     },
 
     // 重置 ·添加用户· 表单

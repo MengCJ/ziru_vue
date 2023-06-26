@@ -25,7 +25,6 @@ requests.interceptors.request.use((config)=>{
 });
 // 响应拦截器
 requests.interceptors.response.use((res)=>{
-    // console.log('响应拦截器',res)
     if (res && res.status == 200 && res.data.status == 500) {
         // success.status 表示 HTTP 的响应状态码
         // success.data.status 表示服务端返回的 JSON 中的 status 的值
