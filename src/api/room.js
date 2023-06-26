@@ -26,6 +26,11 @@ export const addRoomAndupdataRoom = (data)=>{
     }
         return req({url:'/room',method:"post",data})
 }
+
+// 上线
+export const Online = (roomId) => req({url:`room/online/${roomId}`,method:"put"})
+// 下线
+export const Offline = (roomId) => req({url:`room/Offline/${roomId}`,method:"put"})
    
     
 

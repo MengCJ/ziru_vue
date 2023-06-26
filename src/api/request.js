@@ -31,7 +31,7 @@ requests.interceptors.response.use((res)=>{
         //此时，说明业务是失败的
         //在这里直接返回
         nprogress.done();
-        return;
+        return  ;
     }
     // if (res.data.message) {
     //     //如果服务端返回的 JSON 中包含 message 字段，则将之弹框显示出来

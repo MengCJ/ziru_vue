@@ -1,7 +1,7 @@
 <template>
   <div class="room">
     <div>
-      <el-card class="box-card">
+      <el-card class="box-card" >
         所属小区
         <el-select
           v-model="sreach.rid"
@@ -67,20 +67,32 @@
           <el-tag size="plus">{{ row.residence.name }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="buildingNo" label="楼栋名称"> </el-table-column>
-      <el-table-column prop="unitNo" label="单元号"> </el-table-column>
+      <el-table-column prop="buildingNo" label="楼栋名称" > </el-table-column>
+      <el-table-column prop="unitNo" label="单元号" width="130"> </el-table-column>
       <el-table-column prop="roomNo" label="房间号"> </el-table-column>
-      <el-table-column prop="roomType" label="户型"> </el-table-column>
+      <el-table-column prop="roomType" label="户型" width="100"> </el-table-column>
       <el-table-column prop="roomDirection" label="房间朝向"> </el-table-column>
+      <el-table-column  label="禁用"> 
+        <template slot-scope="{row}">
+          <el-tag type="success" v-if="row.isOnline==1">上线</el-tag>
+          <el-tag type="danger" v-if="row.isOnline==0">下线</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="rentFee" label="租金"> </el-table-column>
       <el-table-column prop="propertyFee" label="物业费"> </el-table-column>
       <el-table-column width="300" label="操作">
         <template slot-scope="{ row }">
-          <el-button type="success" size="mini" @click="updataRommds(row)"
-            >更新</el-button
+          <HintButton type="primary" icon="el-icon-edit" size="mini" title="更新" @click="updataRommds(row)" 
+            ></HintButton
           >
-          <el-button type="danger" size="mini" @click="deleteRoom(row)"
-            >删除</el-button
+          <HintButton type="danger" icon="el-icon-delete"  size="mini" title="删除" @click="deleteRoom(row)"
+            ></HintButton
+          >
+          <HintButton type="success" icon="el-icon-bottom" v-if="row.isOnline==1" size="mini" title="下线" @click="leftLine(row.roomId)"
+            ></HintButton
+          >
+          <HintButton type="success" size="mini" icon="el-icon-top" v-if="row.isOnline==0" title="上线" @click="goToline(row.roomId)"
+            ></HintButton
           >
         </template>
       </el-table-column>
@@ -91,12 +103,11 @@
 </template>
 
 <script>
+import HintButton  from "../../components/HintButton/index.vue"
 import AddRoom from "./addFrom/AddRoom.vue";
-const MIN_NUMBER = 1;
-const MAX_NUMBER = 100000;
 export default {
   name: "Room",
-  components: { AddRoom },
+  components: { AddRoom ,HintButton},
   data() {
     return {
       roomData: [],
@@ -126,6 +137,9 @@ export default {
   },
   methods: {
     validateMin(rule, value, callback) {
+      if(value==""){
+        return callback();
+      }
       const one = Number(value);
       const max = Number(this.sreach.maxrentFee);
       if (!max || one < max) {
@@ -134,6 +148,9 @@ export default {
       return callback(new Error("输入值不得大于最大阈值"));
     },
     validateMax(rule, value, callback) {
+      if(value==""){
+        return callback();
+      }
       const one = Number(value);
       const min = Number(this.sreach.minrentFee);
       if (!min || one > min) {
@@ -142,8 +159,11 @@ export default {
       return callback(new Error("输入值不得小于最小阈值"));
     },
     validateNumber(rule, value, callback) {
+      if(value==""){
+        return callback();
+      }
       const one = Number(value);
-      console.log(one);
+      
       if( Object.is(one,NaN)  ){
         return callback(new Error(`请输入整数`));
       }
@@ -201,6 +221,20 @@ export default {
           this.$message.error("删除失败");
         });
     },
+    async goToline(roomId){
+      const res = await this.$Api.Online(roomId)
+      if(res.status==200){
+        this.$message.success("上线成功")
+        this.getRoomData()
+      }
+    },
+    async leftLine(roomId){
+      const res = await this.$Api.Offline(roomId)
+      if(res.status==200){
+        this.$message.success("下线成功")
+        this.getRoomData()
+      }
+    },
   },
   mounted() {
     this.getRoomData();
@@ -211,8 +245,9 @@ export default {
 
 <style lang="less" scoped>
 .box-card {
-  width: 100%;
   display: flex;
+  padding: 0;
+  margin-top: 10px;
 }
 .el-input {
   width: 200px;
