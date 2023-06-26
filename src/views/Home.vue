@@ -141,7 +141,7 @@ export default {
 .middle {
   display: flex;
   .left {
-    width: 250px;
+    width: 200px;
     height: 90%;
     background: #d3dce6;
   }

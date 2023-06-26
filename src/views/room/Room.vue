@@ -27,11 +27,11 @@
         ></el-input>
         租金范围
         <el-form ref="form" :model="sreach" :rules="rules" style="display: flex; display: inline-block;">
-          <el-form-item prop="minrentFee" style="display: inline-block;">
+          <el-form-item prop="minrentFee" style="display: inline-block; margin: 0;">
             <el-input v-model.number="sreach.minrentFee" style="width:100px" size="mini"/>
           </el-form-item>
           ~
-          <el-form-item prop="maxrentFee" style="display: inline-block;">
+          <el-form-item prop="maxrentFee" style="display: inline-block;margin: 0;">
             <el-input v-model.number="sreach.maxrentFee" style="width:100px" size="mini"/>
           </el-form-item>
         </el-form>
@@ -62,14 +62,14 @@
     >
       <el-table-column prop="roomId" label="编号" width="60" :align="center">
       </el-table-column>
-      <el-table-column label="所属小区" width="150" :align="center">
+      <el-table-column label="所属小区" width="100" :align="center">
         <template slot-scope="{ row }">
           <el-tag size="plus">{{ row.residence.name }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="buildingNo" label="楼栋名称" > </el-table-column>
-      <el-table-column prop="unitNo" label="单元号" width="130"> </el-table-column>
-      <el-table-column prop="roomNo" label="房间号"> </el-table-column>
+      <el-table-column prop="unitNo" label="单元号" width="100"> </el-table-column>
+      <el-table-column prop="roomNo" label="房间号" width="60"> </el-table-column>
       <el-table-column prop="roomType" label="户型" width="100"> </el-table-column>
       <el-table-column prop="roomDirection" label="房间朝向"> </el-table-column>
       <el-table-column  label="禁用"> 
@@ -78,9 +78,9 @@
           <el-tag type="danger" v-if="row.isOnline==0">下线</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="rentFee" label="租金"> </el-table-column>
-      <el-table-column prop="propertyFee" label="物业费"> </el-table-column>
-      <el-table-column width="300" label="操作">
+      <el-table-column prop="rentFee" label="租金" width="80"> </el-table-column>
+      <el-table-column prop="propertyFee" label="物业费" width="60"> </el-table-column>
+      <el-table-column width="250" label="操作">
         <template slot-scope="{ row }">
           <HintButton type="primary" icon="el-icon-edit" size="mini" title="更新" @click="updataRommds(row)" 
             ></HintButton
@@ -246,8 +246,12 @@ export default {
 <style lang="less" scoped>
 .box-card {
   display: flex;
-  padding: 0;
+  align-items: center;
   margin-top: 10px;
+  
+}
+.el-card__body, .el-main{
+ padding: 10px 10px;
 }
 .el-input {
   width: 200px;
