@@ -42,7 +42,7 @@ export default {
     async login() {
       this.loading = true;
       const res = await doLogin(this.user);
-      if (res) {
+      if (res.status==200) {
         this.userinfo = res.data;
         window.localStorage.setItem("userInfo", JSON.stringify(res.data));
         this.loading = false;
@@ -54,7 +54,7 @@ export default {
       }else{
         this.$notify.error({
           title: '错误',
-          message: '用户名或密码不正确'
+          message: res.message
         });
       }
     },
