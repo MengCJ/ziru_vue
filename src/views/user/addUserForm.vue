@@ -10,9 +10,10 @@
       <el-form-item label="角色" prop="nameZh" :label-width="formLabelWidth">
           <el-select v-model="form.rid" placeholder="请选择">
             <el-option
-              v-for="(item,index) in role"
-              :key="index"
+              v-for="item in role"
+              :key="item.rid"
               :label="item.nameZh"
+              :disabled="!item.enabled"
               :value="item.rid">
             </el-option>
           </el-select>
@@ -70,7 +71,7 @@ export default {
       dialogFormVisible: false,
       form: {
         name: "",
-        rid:null,
+        rid:'',
         phone: "",
         telephone: "",
         address: "",
@@ -78,8 +79,7 @@ export default {
         password: "",
         userface:
           "http://bpic.588ku.com/element_pic/01/40/00/64573ce2edc0728.jpg",
-        remark: "",
-        // role: {},
+        remark: ""
       },
       formLabelWidth: "120px",
       role:[]
@@ -127,7 +127,7 @@ export default {
       }
     },
     async getRoleList(){
-      const roleData = await this.$UserApi.getRoleList()
+      const roleData = await this.$UserApi.getAllRoleList()
       this.role = roleData.data
       console.log('role列表',this.role)
     },
