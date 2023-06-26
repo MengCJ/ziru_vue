@@ -80,7 +80,6 @@ export default {
   mounted(){
     this.getUserList(),
     this.userInfo = JSON.parse(window.localStorage.getItem('userInfo'))
-    console.log(this.userInfo.username)
   },
   watch:{
     searchKey:{
@@ -120,7 +119,6 @@ export default {
           this.$refs.userForm.form = res.data
         }
       } catch (error) {
-        console.log(error)
         this.$message.error("出错了aaaa")
       }
       this.$refs.userForm.dialogFormVisible = true
