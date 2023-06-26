@@ -21,3 +21,17 @@ export const getUserById = (id) => req({url:`/user/${id}`,method:'get'})
 
 // 解封用户
 export const deBlockedUser = (id) => req({url:`/user/${id}`,method:'put'})
+
+// 查看可用岗位
+export const getRoleList = () => req({url:'/role',method:'get'})
+
+// 查看所有岗位
+export const getAllRoleList = () => req({url:'/role/all',method:'get'})
+
+// 分页查询所有岗位
+export const getRoleListByPage = (params) => req({url:'/role/page',method:'get',params})
+
+// 更新岗位状态
+export const updateRole = (role) => req({url:'/role',method:'put',data:role})
+// 添加岗位
+export const addRole = (role) => req({url:'/role',method:'post',data:role})

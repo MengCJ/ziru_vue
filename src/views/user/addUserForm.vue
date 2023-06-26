@@ -7,6 +7,16 @@
       <el-form-item label="手机号" prop="phone" :label-width="formLabelWidth">
         <el-input v-model="form.phone" autocomplete="off"></el-input>
       </el-form-item>
+      <el-form-item label="角色" prop="nameZh" :label-width="formLabelWidth">
+          <el-select v-model="form.rid" placeholder="请选择">
+            <el-option
+              v-for="(item,index) in role"
+              :key="index"
+              :label="item.nameZh"
+              :value="item.rid">
+            </el-option>
+          </el-select>
+      </el-form-item>
       <el-form-item
         label="固定电话"
         prop="telephone"
@@ -60,6 +70,7 @@ export default {
       dialogFormVisible: false,
       form: {
         name: "",
+        rid:null,
         phone: "",
         telephone: "",
         address: "",
@@ -67,13 +78,15 @@ export default {
         password: "",
         userface:
           "http://bpic.588ku.com/element_pic/01/40/00/64573ce2edc0728.jpg",
-        remark: ""
+        remark: "",
+        // role: {},
       },
       formLabelWidth: "120px",
+      role:[]
     };
   },
   mounted(){
-    // console.log(this)
+    this.getRoleList()
   },
   methods:{
     async handleSumit(){
@@ -112,6 +125,11 @@ export default {
           this.$message.error('出错啦~')
         }
       }
+    },
+    async getRoleList(){
+      const roleData = await this.$UserApi.getRoleList()
+      this.role = roleData.data
+      console.log('role列表',this.role)
     },
 
     // 重置 ·添加用户· 表单

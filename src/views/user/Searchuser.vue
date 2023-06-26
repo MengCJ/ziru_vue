@@ -24,14 +24,15 @@
     <el-table :data="tableData" style="width: 100%" border>
       <el-table-column prop="name" label="昵称"></el-table-column>
       <el-table-column prop="phone" label="手机号"></el-table-column>
+      <el-table-column prop="role.nameZh" label="角色"></el-table-column>
       <el-table-column prop="telephone" label="固定电话"></el-table-column>
       <el-table-column prop="address" label="地址"></el-table-column>
       <el-table-column prop="username" label="用户名"></el-table-column>
-      <!-- <el-table-column prop="password" label="密码"></el-table-column> -->
       <el-table-column prop="remark" label="备注"></el-table-column>
       <el-table-column prop="enabled" label="状态">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.enabled" @click="handleStatus(scope.row)" type="success">正常用户</el-tag>
+          <el-tag v-if="scope.row.username==userInfo.username">当前用户</el-tag>
+          <el-tag v-else-if="scope.row.enabled" @click="handleStatus(scope.row)" type="success">正常用户</el-tag>
           <el-tag v-if="!scope.row.enabled" @click="handleStatus(scope.row)" type="danger">已封禁</el-tag>
         </template>
       </el-table-column>
@@ -73,10 +74,13 @@ export default {
       currentPage:1,
       pageSize: 5,
       total: 0,
+      userInfo:{}
     };
   },
   mounted(){
-    this.getUserList()
+    this.getUserList(),
+    this.userInfo = JSON.parse(window.localStorage.getItem('userInfo'))
+    console.log(this.userInfo.username)
   },
   watch:{
     searchKey:{
@@ -116,6 +120,7 @@ export default {
           this.$refs.userForm.form = res.data
         }
       } catch (error) {
+        console.log(error)
         this.$message.error("出错了aaaa")
       }
       this.$refs.userForm.dialogFormVisible = true

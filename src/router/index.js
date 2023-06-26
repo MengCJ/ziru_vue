@@ -65,29 +65,20 @@ const routes = [
   },
   {
     path: '/home',
-    name: '日志管理',
+    name: '岗位管理',
     component: ()=>import("@/views/Home"),
     meta:{
       icon:"el-icon-menu",
     },
     children:[
       {
-        path:'/addlogs',
-        name:"添加日志",
-        component:()=>import("@/views/logs/Addlogs"),
+        path:'/role',
+        name:"管理岗位",
+        component:()=>import("@/views/role/Role"),
         meta:{
-          name:"添加日志",icon:"el-icon-document-remove"
+          name:"岗位管理",icon:"el-icon-document-remove"
         }
-      },
-     {
-      path:"/searchlogs",
-      name:'分析日志',
-      component:()=>import("@/views/logs/Searchlogs"),
-      meta:{
-        name:"分析日志",icon:"el-icon-data-analysis"
       }
-     }
-    
     ]
   },
   {

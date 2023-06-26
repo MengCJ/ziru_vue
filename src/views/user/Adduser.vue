@@ -21,7 +21,7 @@ export default {
   },
   methods:{
     // title 添加用户 | 更新用户
-    handleAddBtn(){
+    async handleAddBtn(){
       this.$refs.userFrom.title = '添加用户'
       this.$refs.userFrom.dialogFormVisible = true
     }
