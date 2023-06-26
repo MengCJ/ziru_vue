@@ -92,13 +92,13 @@ export default {
     // 获取编辑小区数据
     async editResidenceData(row) {
       this.dataTitie = "编辑小区";
-      this.dialogFormVisible = true;
       const res = await this.$Api.addResidenceById(row.rid);
       if (res.status == 200) {
         const d = res.data;
         this.residence = d;
         this.selectedOptions = [d.province, d.city, d.area];
       }
+      this.dialogFormVisible = true;
     },
   },
 };
