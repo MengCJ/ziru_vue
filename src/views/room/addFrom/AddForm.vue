@@ -40,7 +40,6 @@ export default {
     return {
       residence: {
         name: "",
-        province: "",
         link: "",
         linkPhone: "",
         address: "",
@@ -56,12 +55,12 @@ export default {
     async sendDate() {
       this.dialogFormVisible = !this.dialogFormVisible;
  
-      this.selectedOptions = [];
       const [province, city, area] = this.selectedOptions;
       let result = { ...this.residence, province, city, area };
 
       if (result.rid) {
         const res = await this.$Api.putResidence(result);
+        console.log(result,"更新");
         if (res.status == 200) {
           this.$message({
             type: "success",
@@ -70,7 +69,7 @@ export default {
         }
       } else {
         const res = await this.$Api.addRedience(result);
-
+        console.log(result,"添加");
         if (res.status == 200) {
           this.$message({
             type: "success",
