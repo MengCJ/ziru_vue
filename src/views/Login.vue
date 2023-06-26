@@ -42,7 +42,6 @@ export default {
     async login() {
       this.loading = true;
       const res = await doLogin(this.user);
-      console.log(res);
       if (res) {
         this.userinfo = res.data;
         window.localStorage.setItem("userInfo", JSON.stringify(res.data));

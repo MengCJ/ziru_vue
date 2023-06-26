@@ -16,6 +16,7 @@
           :options="pcaTextArr"
           v-model="search.pro"
           style="width: 200px"
+          clearable
         >
         </el-cascader>
       </span>
